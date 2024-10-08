@@ -1,10 +1,10 @@
 import numpy as np
 
-a = np.array([3, 2, 1], [4])
+a = np.array([3, 2, 1], dtype='uint8')
 
 assert a.dtype == "uint8"
 
-b = np.zeros(5,5)
+b = np.zeros((5,5))
 
 assert b.shape == (5, 5) and b.sum() == 0
 
@@ -12,11 +12,11 @@ c = np.array([[[1]],[[1]],[[1]]])
 
 assert c.ndim == 3 and c.sum() / c.size == 1
 
-d = np.arrange(-5,5)
+d = np.arange(-5,5)
 
 assert np.all(d == np.array([-5, -4, -3, -2, -1, 0, 1, 2, 3, 4]))
 
-e = np.arrange(0,1.25,0.25)
+e = np.arange(0,1.25,0.25)
 
 assert np.all(e == np.array([0., 0.25, 0.5, 0.75, 1.0]))
 
@@ -72,4 +72,5 @@ rc = r.copy()
 rc[1:3] = -1
 
 assert np.all(r[1:3] == np.array([3, 5])) and np.all(rc[1:3] == np.array([-1, -1]))
+
 
