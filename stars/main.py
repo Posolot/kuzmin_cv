@@ -76,8 +76,8 @@ struct1 = [[1, 0, 0, 0, 1], [0, 1, 0, 1, 0], [0, 0, 1, 0, 0], [0, 1, 0, 1, 0], [
 struct2 = [[0, 0, 1, 0, 0], [0, 0, 1, 0, 0], [1, 1, 1, 1, 1], [0, 0, 1, 0, 0], [0, 0, 1, 0, 0]]
 
 image = np.load(f"starsnpy.txt").astype(int)
-count_one = two_pass(binary_opening(image, struct2).astype(int))
-count_two = two_pass(binary_opening(image, struct1).astype(int))
+count_one = two_pass(binary_erosion(image, struct2).astype(int))
+count_two = two_pass(binary_erosion(image, struct1).astype(int))
 plt.imshow(image)
 print(count_one.max()+count_two.max())
 plt.show()
