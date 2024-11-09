@@ -1,10 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.datasets import face
-from skimage.draw import disk
-from sys import getrecursionlimit, setrecursionlimit
-from scipy.ndimage import binary_dilation, binary_erosion, binary_closing, binary_opening
-import scipy.ndimage.morphology
+from skimage.measure import label
+from scipy.ndimage import binary_erosion
 
 
 def neighbours2(y, x):
@@ -73,36 +70,32 @@ def two_pass(B):
 
 
 struct2 = np.ones((4, 6))
-struct3 = [
-    [1, 1, 1, 1],
-    [1, 1, 1, 1],
-    [1, 1, 0, 0],
-    [1, 1, 0, 0],
-    [1, 1, 1, 1],
-    [1, 1, 1, 1]
-]
-struct4 = [
-    [1, 1, 1, 1],
-    [1, 1, 1, 1],
-    [0, 0, 1, 1],
-    [0, 0, 1, 1],
-    [1, 1, 1, 1],
-    [1, 1, 1, 1]
-]
-struct6 = [
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 0, 0, 1, 1],
-    [1, 1, 0, 0, 1, 1]
-]
-struct5 = [
-    [1, 1, 0, 0, 1, 1],
-    [1, 1, 0, 0, 1, 1],
-    [1, 1, 1, 1, 1, 1],
-    [1, 1, 1, 1, 1, 1]
-]
+struct3 = np.array([[1, 1, 1, 1, 1, 1],
+                   [1, 1, 1, 1, 1, 1],
+                   [1, 1, 0, 0, 1, 1],
+                   [1, 1, 0, 0, 1, 1]])
+
+struct4 = np.array([[1, 1, 0, 0, 1, 1],
+                   [1, 1, 0, 0, 1, 1],
+                   [1, 1, 1, 1, 1, 1],
+                   [1, 1, 1, 1, 1, 1]])
+
+struct5 = np.array([[1, 1, 1, 1],
+                   [1, 1, 1, 1],
+                   [1, 1, 0, 0],
+                   [1, 1, 0, 0],
+                   [1, 1, 1, 1],
+                   [1, 1, 1, 1]])
+
+struct6 = np.array([[1, 1, 1, 1],
+                   [1, 1, 1, 1],
+                   [0, 0, 1, 1],
+                   [0, 0, 1, 1],
+                   [1, 1, 1, 1],
+                   [1, 1, 1, 1]])
 
 image = np.load(f"ps.npy.txt.").astype(int)
+counting = label(image)
 struct_one = two_pass(binary_erosion(image, struct2).astype(int))
 struct_two = two_pass(binary_erosion(image, struct3).astype(int))
 struct_three = two_pass(binary_erosion(image, struct4).astype(int))
@@ -110,11 +103,12 @@ struct_four = two_pass(binary_erosion(image, struct5).astype(int))
 struct_five = two_pass(binary_erosion(image, struct6).astype(int))
 
 print(f"Кол-во полных горизонтальных объектов ", struct_one.max())
-print(f"Кол-во вертикальных объектов(отсутстствует квадрат справа в середине) ", struct_two.max())
-print(f"Кол-во вертикальных объектов (отсутстствует квадрат слева в середине)", struct_three.max())
+print(f"Кол-во вертикальных объектов(отсутстствует квадрат справа в середине) ", struct_two.max()-struct_one.max())
+print(f"Кол-во вертикальных объектов (отсутстствует квадрат слева в середине)", struct_three.max()-struct_one.max())
 print(f"Кол-во горизонтальных объектов(отсутстствует квадрат снизу в середине) ", struct_four.max())
 print(f"Кол-во горизонтальных объектов (отсутстствует квадрат сверху в середине)", struct_five.max())
-print(f"Кол-во всех объектов ", struct_two.max()+struct_three.max()+struct_four.max()+struct_five.max()+struct_one.max())
+print(f"Кол-во всех объектов ", counting.max())
+
 
 plt.imshow(image)
 plt.show()
