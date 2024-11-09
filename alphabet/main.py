@@ -10,14 +10,14 @@ def recognize(region):
         return "-"
     else:
         enumber = euler_number(region.image)
-        if enumber == -1:  # B or 8
+        if enumber == -1:
             have_vl = np.sum(np.mean(region.image[:, :region.image.shape[1]//2],
                                      0) == 1) > 3
             if have_vl:
                 return "B"
             else:
                 return "8"
-        elif enumber == 0:  # A or 0 // or P or D
+        elif enumber == 0:
             image = region.image.copy()
             image[-1, :] = 1
             enumber = euler_number(image)
@@ -33,7 +33,7 @@ def recognize(region):
                     return "D"
             else:
                 return "0"
-        else:  # /, W, X, *, 1
+        else:
             have_vl = np.sum(np.mean(region.image, 0) == 1) > 3
             if have_vl:
                 return "1"
@@ -53,7 +53,7 @@ def recognize(region):
                         return "X"
                     else:
                         return "W"
-    #return "@"
+    return "@"
 
 
 im = plt.imread("symbols.png")[:, :, :3].mean(2)
