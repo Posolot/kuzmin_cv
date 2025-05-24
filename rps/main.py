@@ -10,7 +10,7 @@ model_path = path / "best.pt"
 model = YOLO(model_path)
 
 cap = cv2.VideoCapture(0)
-state = "temp"
+state = "igle"
 prev_time = 0
 curr_time = 0
 player1_hand = ""
